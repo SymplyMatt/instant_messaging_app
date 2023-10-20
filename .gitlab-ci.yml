@@ -6,5 +6,5 @@ deploy:
   script:
     - npm install  
     - node server  
-  only: 
+  only:  
     - master  
