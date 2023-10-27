@@ -1,5 +1,6 @@
-const socket = io("/");
+const socket = io('http://localhost:3002');
 const videoGrid = document.getElementById("video-grid");
+const myVideo = document.getElementById("myVideo");
 const user = prompt("Enter your name");
 let myPeerId;
 const videoLink = window.location.pathname.substring(1);
@@ -8,8 +9,8 @@ const createVideoBtn = document.getElementById("createVideoBtn");
 let videoStreamId;
 let myVideoStream;
 const peerConfig = {
-  host: 'your-peerjs-server-host',
-  port: 'your-peerjs-server-port',
+  host: 'localhost',
+  port: '3002',
   path: '/peerjs',
   config: {
     iceServers: [
@@ -42,11 +43,13 @@ peer.on("open", (id) => {
     console.log('My Peer ID is: ' + id);
     myPeerId = id;
 });
-
 socket.emit("watch-video-stream", videoLink, user);
   
 toggleVideoSharingButton.addEventListener("click", function() {
     toggleVideoSharing();
+});
+createVideoBtn.addEventListener("click", function() {
+    createVideo();
 });
 function addVideoStream(video, stream) {
   video.srcObject = stream;
@@ -115,7 +118,7 @@ function startSharingVideo() {
         socket.emit("join-video-stream",'1234',myPeerId,videoStreamId);
     });
 }
-function createVideoBtn() {
+function createVideo() {
   navigator.mediaDevices
     .getUserMedia({
       audio: true,
@@ -124,7 +127,7 @@ function createVideoBtn() {
     .then((stream) => {
         myVideoStream = stream;
         addVideoStream(myVideo, stream);
-        socket.emit("create-video-stream",'1234','1234', myPeerId);
+        socket.emit("create-video-stream",'1234', myPeerId);
     });
 }
 

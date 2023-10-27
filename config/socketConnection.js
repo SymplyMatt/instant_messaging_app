@@ -171,6 +171,8 @@ const connectSocket = (server) => {
     });
 
     socket.on('create-video-stream', async(userId,peer) => {
+      console.log('user: ', userId);
+      console.log('peer: ', peer);
       try {
         // Generate a UUID
         const videolink = uuidv4();
