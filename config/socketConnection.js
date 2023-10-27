@@ -8,7 +8,9 @@ const add_to_group = require('../controllers/sockets/add_to_group');
 const exit_group = require('../controllers/sockets/exit_group');
 const remove_from_group = require('../controllers/sockets/remove_from_group');
 const edit_group = require('../controllers/sockets/edit_group');
-
+const VideoStream = require('../model/VideoStream');
+const StreamMember = require('../model/StreamMember');
+const { v4: uuidv4 } = require('uuid');
 const connectSocket = (server) => {
   const io = socketio(server, {
     cors: {
@@ -168,6 +170,57 @@ const connectSocket = (server) => {
       }
     });
 
+    socket.on('create-video-stream', async(userId,peer) => {
+      try {
+        // Generate a UUID
+        const videolink = uuidv4();
+        const newStream = await VideoStream.create({
+          createdBy : userId,
+          link : videolink
+        });
+        const newStreamMember = await StreamMember.create({
+          videoStream : newStream._id,
+          user : userId,
+          peer : peer
+        });
+        socket.join(videolink);
+        socket.emit('receive-video-link', newStream.link );    
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    socket.on('watch-video-stream', async(link, userName) => {
+      try {
+        // Generate a UUID
+        const videoStream = await VideoStream.findOne({link});
+        if(videoStream){
+          const streamMembers = await StreamMember.find({videoStream : videoStream._id});
+          socket.join(videoStream.link);
+          io.to(videoStream.link).emit('new-user-watching', `${userName} started watching this stream` );
+          socket.emit('receive-stream-members', streamMembers );    
+        } 
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    socket.on('join-video-stream', async(userId,peer,streamId) => {
+      try {
+        const videoStream = await VideoStream.findById(streamId);
+        if(videoStream){
+          const newStreamMember = await StreamMember.create({
+            videoStream : streamId,
+            user : userId,
+            peer : peer
+          });
+          socket.join(videoStream.link);
+          io.to(videoStream.link).emit('new-stream-member', newStreamMember );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });
 
     socket.on('disconnect', async () => {
       try {

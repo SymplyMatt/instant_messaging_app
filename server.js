@@ -14,10 +14,15 @@ const axios = require('axios');
 const http = require('http');
 const server = http.createServer(app);
 const socketio = require('socket.io');
-
+const { v4: uuidv4 } = require("uuid");
 const connectSocket = require('./config/socketConnection')(server);
 connectDb();
+const { ExpressPeerServer } = require("peer");
+const opinions = {
+  debug: true,
+}
 
+app.use("/peerjs", ExpressPeerServer(server, opinions));
 
 // cors 
 app.use(cors(corsOptions));
@@ -32,7 +37,10 @@ app.use(methodOverride('_method'));
 
 app.use("/redirect", express.static(__dirname + "/public"));
 
-
+app.get("/", (req, res) => {
+    res.redirect(`/${uuidv4()}`);
+});
+  
 
 mongoose.connection.once("open", () => {
     console.log("Connected to MongoDB");
