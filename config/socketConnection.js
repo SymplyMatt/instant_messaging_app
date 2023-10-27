@@ -198,7 +198,7 @@ const connectSocket = (server) => {
           const streamMembers = await StreamMember.find({videoStream : videoStream._id});
           socket.join(videoStream.link);
           io.to(videoStream.link).emit('new-user-watching', `${userName} started watching this stream` );
-          socket.emit('receive-stream-members', streamMembers );    
+          socket.emit('receive-stream-members', streamMembers, videoStream._id );    
         } 
       } catch (error) {
         console.log(error);
