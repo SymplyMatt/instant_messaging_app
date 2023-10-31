@@ -1,0 +1,9 @@
+kind: Pod
+apiVersion: v1
+metadata:
+ name: instant-messaging
+spec:
+ containers:
+ - name: instant-messaging
+   image: symplymatt/instant_messaging
+   imagePullPolicy: Always
