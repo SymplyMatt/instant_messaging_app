@@ -3,9 +3,12 @@ const videoGrid = document.getElementById("video-grid");
 const myVideo = document.getElementById("myVideo");
 const user = prompt("Enter your name");
 let myPeerId;
-const videoLink = window.location.pathname.substring(1);
+console.log('video link:', videoLink);
 const toggleVideoSharingButton = document.getElementById("toggleVideoSharing");
 const createVideoBtn = document.getElementById("createVideoBtn");
+const joinVideoInput = document.getElementById('joinVideoInput');
+const joinVideoBtn = document.getElementById('joinVideoBtn');
+const videoLink = document.getElementById('videoLink');
 let videoStreamId;
 let myVideoStream;
 const peerConfig = {
@@ -43,7 +46,25 @@ peer.on("open", (id) => {
     console.log('My Peer ID is: ' + id);
     myPeerId = id;
 });
-socket.emit("watch-video-stream", videoLink, user);
+navigator.mediaDevices
+    .getUserMedia({ video: true, audio: true })
+    .then((stream) => {
+      peer.on("call", (call) => {
+        console.log('someone is calling');
+        call.answer(stream);
+        const video = document.createElement("video");
+        call.on("stream", (userVideoStream) => {
+          addVideoStream(video, userVideoStream);
+        });
+      });
+    })
+    .catch((error) => {
+      console.error('Error accessing media devices:', error);
+    });
+
+joinVideoBtn.addEventListener('click', ()=>{
+  socket.emit("watch-video-stream", joinVideoInput.value, user);
+})
   
 toggleVideoSharingButton.addEventListener("click", function() {
     toggleVideoSharing();
@@ -61,17 +82,33 @@ function addVideoStream(video, stream) {
 
 
 socket.on("receive-stream-members", (members, streamId) => {
-  console.log(members);
-  console.log(streamId);
-  videoStreamId = streamId
-  members.forEach((member) => {
-    const call = peer.call(member.peer);
-    call.on("stream", (userVideoStream) => {
-      const video = document.createElement("video");
-      addVideoStream(video, userVideoStream);
+  let myStream;
+
+  navigator.mediaDevices
+    .getUserMedia({ video: true, audio: true })
+    .then((stream) => {
+      myStream = stream;
+      console.log(members);
+      console.log(streamId);
+      videoStreamId = streamId;
+
+      members.forEach((member) => {
+        console.log('members:', member);
+        console.log('my stream: ', myStream);
+
+        const call = peer.call(member.peer, myStream);
+        call.on("stream", (userVideoStream) => {
+          console.log('the other user video stream', userVideoStream);
+          const video = document.createElement("video");
+          addVideoStream(video, userVideoStream);
+        });
+      });
+    })
+    .catch((error) => {
+      console.error('Error accessing media devices:', error);
     });
-  });
 });
+
 
 
 socket.on("new-stream-member", (member) => {
@@ -144,6 +181,3 @@ function stopSharingVideo() {
   socket.emit("leave-video-stream");
 }
 
-// Listen for a button click to toggle video sharing
-const toggleVideoButton = document.getElementById("toggleVideo");
-toggleVideoButton.addEventListener("click", toggleVideoSharing);

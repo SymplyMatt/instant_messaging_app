@@ -172,8 +172,6 @@ const connectSocket = (server) => {
     });
 
     socket.on('create-video-stream', async(userId,peer) => {
-      console.log('user: ', userId);
-      console.log('peer: ', peer);
       try {
         // Generate a UUID
         const videolink = uuidv4();
@@ -187,6 +185,7 @@ const connectSocket = (server) => {
           peer : peer
         });
         socket.join(videolink);
+        console.log(' newStream link: ',  newStream.link);
         socket.emit('receive-video-link', newStream.link );    
       } catch (error) {
         console.log(error);
@@ -197,6 +196,7 @@ const connectSocket = (server) => {
       try {
         // Generate a UUID
         const videoStream = await VideoStream.findOne({link});
+        console.log('videoStream to join: ', videoStream);
         if(videoStream){
           const streamMembers = await StreamMember.find({videoStream : videoStream._id});
           socket.join(videoStream.link);

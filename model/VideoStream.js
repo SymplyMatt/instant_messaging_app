@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema({
     createdBy:{
-        type : mongoose.Schema.Types.ObjectId,
+        // type : mongoose.Schema.Types.ObjectId,
+        type : String,
         ref : 'User',
         required : true
     },
