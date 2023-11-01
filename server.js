@@ -23,8 +23,9 @@ var ExpressPeerServer = require('peer').ExpressPeerServer;
 var peerExpress = require('express');
 var peerApp = peerExpress();
 var peerServer = require('http').createServer(peerApp);
-var options = { debug: true, allow_origin: '*' }; // Allow requests from all origins
+var options = { debug: true }
 var peerPort = 3001;
+peerApp.use('/peerjs', ExpressPeerServer(peerServer, options));
 // cors 
 app.use(cors(corsOptions));
 
