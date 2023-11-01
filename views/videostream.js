@@ -1,4 +1,4 @@
-const socket = io('https://instant-messaging.onrender.com');
+const socket = io('http://localhost:3002');
 const videoGrid = document.getElementById("video-grid");
 const myVideo = document.getElementById("myVideo");
 const user = prompt("Enter your name");
@@ -73,6 +73,7 @@ createVideoBtn.addEventListener("click", function() {
     createVideo();
 });
 function addVideoStream(video, stream) {
+  console.log('i was called');
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
@@ -83,7 +84,7 @@ function addVideoStream(video, stream) {
 
 socket.on("receive-stream-members", (members, streamId) => {
   let myStream;
-
+  console.log('i received stream members');
   navigator.mediaDevices
     .getUserMedia({ video: true, audio: true })
     .then((stream) => {
