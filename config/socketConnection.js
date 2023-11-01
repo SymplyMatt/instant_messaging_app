@@ -16,7 +16,8 @@ const connectSocket = (server) => {
     cors: {
       origin: "*",
       methods: ["GET", "POST"]
-    }
+    },
+    allowEIO3 : true
   });
 
   // Set up event handlers for Socket.IO connections

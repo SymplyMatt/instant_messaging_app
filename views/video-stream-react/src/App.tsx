@@ -8,7 +8,8 @@ function App() {
       try {
         const socket:any = await io('http://localhost:3002');
         setSocket(socket);
-
+        console.log('connected to socket');
+        
         
         socket.on('score', (balance: number, points_won : number ) => {
 

@@ -10,7 +10,7 @@ let videoStreamId;
 let myVideoStream;
 const peerConfig = {
   host: 'localhost',
-  port: '3002',
+  port: '3001',
   path: '/peerjs',
   config: {
     iceServers: [
