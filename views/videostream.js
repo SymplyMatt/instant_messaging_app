@@ -1,4 +1,4 @@
-const socket = io('http://localhost:3002');
+const socket = io('https://instant-messaging.onrender.com');
 const videoGrid = document.getElementById("video-grid");
 const myVideo = document.getElementById("myVideo");
 const user = prompt("Enter your name");
@@ -12,8 +12,8 @@ const videoLinkDiv = document.getElementById('videoLinkDiv');
 let videoStreamId;
 let myVideoStream;
 const peerConfig = {
-  host: 'localhost',
-  port: '3001',
+  host: 'instant-messaging.onrender.com',
+  port: '443',
   path: '/peerjs',
   config: {
     iceServers: [
