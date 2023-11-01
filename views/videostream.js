@@ -3,12 +3,12 @@ const videoGrid = document.getElementById("video-grid");
 const myVideo = document.getElementById("myVideo");
 const user = prompt("Enter your name");
 let myPeerId;
-console.log('video link:', videoLink);
 const toggleVideoSharingButton = document.getElementById("toggleVideoSharing");
 const createVideoBtn = document.getElementById("createVideoBtn");
 const joinVideoInput = document.getElementById('joinVideoInput');
 const joinVideoBtn = document.getElementById('joinVideoBtn');
 const videoLink = document.getElementById('videoLink');
+const videoLinkDiv = document.getElementById('videoLinkDiv');
 let videoStreamId;
 let myVideoStream;
 const peerConfig = {
@@ -122,6 +122,8 @@ socket.on("new-stream-member", (member) => {
 
 socket.on("receive-video-link", (link) => {
   console.log('your video link is:', link);
+  videoLinkDiv.innerHTML = link
+  videoLink.value = link
 });
 
 socket.on("new-user-watching", (message) => {
