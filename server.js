@@ -18,24 +18,13 @@ const { v4: uuidv4 } = require("uuid");
 const connectSocket = require('./config/socketConnection')(server);
 connectDb();
 // Peer Server
-// Enable CORS for all routes
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // Replace with the correct origin
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
-
-// Your other route handling code here
-
 
 var ExpressPeerServer = require('peer').ExpressPeerServer;
 var peerExpress = require('express');
 var peerApp = peerExpress();
 var peerServer = require('http').createServer(peerApp);
-var options = { debug: true, cors : '*' }
+var options = { debug: true, allow_origin: '*' }; // Allow requests from all origins
 var peerPort = 3001;
-peerApp.use('/peerjs', ExpressPeerServer(peerServer, options));
 // cors 
 app.use(cors(corsOptions));
 
