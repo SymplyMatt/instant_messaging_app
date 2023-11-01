@@ -8,6 +8,9 @@
     "dev": "nodemon server",
     "server": "node server"
   },
+  "engines": {
+    "node": "v21.1.0"
+  },
   "author": "Ajala Matthew Adekunle",
   "license": "ISC",
   "dependencies": {
