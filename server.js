@@ -17,15 +17,13 @@ const socketio = require('socket.io');
 const { v4: uuidv4 } = require("uuid");
 const connectSocket = require('./config/socketConnection')(server);
 connectDb();
-// Peer Server
+const { ExpressPeerServer } = require("peer");
+const opinions = {
+  debug: true,
+}
+ 
+app.use("/peerjs", ExpressPeerServer(server, opinions));
 
-var ExpressPeerServer = require('peer').ExpressPeerServer;
-var peerExpress = require('express');
-var peerApp = peerExpress();
-var peerServer = require('http').createServer(peerApp);
-var options = { debug: true }
-var peerPort = 3001;
-peerApp.use('/peerjs', ExpressPeerServer(peerServer, options));
 // cors 
 app.use(cors(corsOptions));
 
@@ -42,12 +40,9 @@ app.use("/redirect", express.static(__dirname + "/public"));
 app.get("/", (req, res) => {
     res.redirect(`/${uuidv4()}`);
 });
-
+  
 
 mongoose.connection.once("open", () => {
-  console.log("Connected to MongoDB");
-  server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  peerServer.listen(peerPort, () => console.log(`Peer server now working on port ${peerPort}`));
+    console.log("Connected to MongoDB");
+    server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
-
-

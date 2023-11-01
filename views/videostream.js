@@ -12,7 +12,7 @@ const videoLinkDiv = document.getElementById('videoLinkDiv');
 let videoStreamId;
 let myVideoStream;
 const peerConfig = {
-  host: 'instant-messaging.onrender.com',
+  host: 'localhost',
   port: '3001',
   path: '/peerjs',
   config: {
