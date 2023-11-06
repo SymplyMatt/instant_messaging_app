@@ -41,7 +41,7 @@ const peerConfig = {
   debug: 3
 };
 
-const peer = new Peer(peerConfig);
+const peer = new Peer();
 peer.on("open", (id) => {
     console.log('My Peer ID is: ' + id);
     myPeerId = id;
