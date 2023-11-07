@@ -217,8 +217,8 @@ const connectSocket = (server) => {
             user : userId,
             peer : peer
           });
+          io.to(videoStream.link).emit('new-stream-member', newStreamMember);
           socket.join(videoStream.link);
-          io.to(videoStream.link).emit('new-stream-member', newStreamMember );
         }
       } catch (error) {
         console.log(error);
