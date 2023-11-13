@@ -16,6 +16,7 @@ const server = http.createServer(app);
 const socketio = require('socket.io');
 const { v4: uuidv4 } = require("uuid");
 const connectSocket = require('./config/socketConnection')(server);
+const path = require('path');
 connectDb();
 
 // cors 
@@ -23,7 +24,6 @@ app.use(cors(corsOptions));
 
 // middlewares
 
-// app.use(bodyParser.raw({type: "application/json"}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -31,14 +31,15 @@ app.use(methodOverride('_method'));
 
 app.use("/redirect", express.static(__dirname + "/public"));
 
-app.get("/", (req, res) => {
-    res.redirect(`/${uuidv4()}`);
-});
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
   server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
+
 
 
