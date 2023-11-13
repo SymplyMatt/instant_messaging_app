@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Video streaming</title>
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/c939d0e917.js"></script>
     <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
 </head>
 <body>
-    <div className="">
-        <h1 id="peerId"></h1>
-        <h1 id="socketId"></h1>
-        <h1 id="notification"></h1>
-    </div>
     <div id="video-grid">
         <video src="" id="myVideo"></video>
     </div>
-    <input id="join-input"/>
-    <button id="watchBtn">Watch Stream</button> 
-    <button id="createBtn">Create Stream</button> 
-    <button id="joinBtn">Join Stream</button> 
-
-
-    <script src="/redirect/script.js"></script>
+    <input type="text" id="joinVideoInput">
+    <input type="text" id="videoLink">
+    <div id="videoLinkDiv"></div>
+    <button id="joinVideoBtn">Join video</button>
+    <button id="toggleVideoSharing">Toggle Video</button>
+    <button id="createVideoBtn">Create Video</button>
+    <script src="./videostream.js"></script>
 </body>
-</html>
+</html> 

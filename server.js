@@ -23,7 +23,6 @@ connectDb();
 app.use(cors(corsOptions));
 
 // middlewares
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -34,6 +33,14 @@ app.use("/redirect", express.static(__dirname + "/public"));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+// Set the appropriate Content-Type header for .js files
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js')) {
+    res.type('application/javascript');
+  }
+  next();
 });
 
 mongoose.connection.once("open", () => {
